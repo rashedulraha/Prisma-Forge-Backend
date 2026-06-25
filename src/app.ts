@@ -16,7 +16,7 @@ app.use(
   }),
 );
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", async (req: Request, res: Response) => {
   res.status(200).json({ success: true, message: "Starting route" });
 });
 export default app;
