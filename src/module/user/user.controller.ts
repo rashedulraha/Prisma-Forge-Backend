@@ -7,8 +7,13 @@ const userRegister = async (req: Request, res: Response) => {
     const result = await userService.userRegistrationService(req.body);
     res.status(httpStatus.CREATED).json({ success: true, data: result });
   } catch (error) {
-    const e = error as Error;
-    res.status(httpStatus.CREATED).json({ success: false, data: e });
+    // console.error(error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      data: "User already exist",
+      error: (error as Error).message,
+    });
   }
 };
 

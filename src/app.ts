@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 });
 
 //* user activity routers
-app.use("/api/user", UserRouter);
+app.use("/api/users", UserRouter);
 
 //* register user
 
