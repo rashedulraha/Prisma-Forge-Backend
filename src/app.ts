@@ -70,6 +70,7 @@ app.post("/api/users/register", async (req: Request, res: Response) => {
   await prisma.profile.create({
     data: {
       userId: createdUser.id,
+      profilePhoto: profilePhoto,
     },
   });
 
@@ -78,6 +79,8 @@ app.post("/api/users/register", async (req: Request, res: Response) => {
       id: createdUser.id,
       email: createdUser.email || email,
     },
+    omit: { password: true },
+    include: { profile: true },
   });
 
   // console.log("Payload :", payload);
