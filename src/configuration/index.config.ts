@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const configuration = {
-  port: Number(process.env.PORT) || 7000,
+  port: Number(process.env.PORT) || 8000,
   database_url: process.env.DATABASE_URL!,
   bcrypt_salt_rounds: Number(process.env.BCRYPT_SALT_ROUNDS),
   jwt_access_token: process.env.JWT_ACCESS_TOKEN!,
