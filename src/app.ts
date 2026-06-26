@@ -3,9 +3,8 @@ import cors from "cors";
 import express, { Application, Request, Response } from "express";
 import { configuration } from "./configuration/index.config";
 import { prisma } from "./lib/prisma";
-import httpStatus from "http-status";
-import bcrypt from "bcryptjs";
 import { UserRouter } from "./module/user/user.route";
+import { authRouter } from "./module/auth/auth.route";
 
 const app: Application = express();
 
@@ -26,6 +25,8 @@ app.get("/", (req, res) => {
 
 //* user activity routers
 app.use("/api/users", UserRouter);
+// * login user
+app.use("/api/auth/", authRouter);
 
 //* register user
 
