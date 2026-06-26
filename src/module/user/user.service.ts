@@ -18,15 +18,24 @@ const userRegistrationService = async (payload: IRegistration) => {
     Number(configuration.bcrypt_salt_rounds),
   );
 
-  // * inter  user data in database and create account
+  // * inter  user data in database and create account and profile creation
   const createUser = await prisma.user.create({
-    data: { name, email, password: hashPassword },
+    data: {
+      name,
+      email,
+      password: hashPassword,
+      profile: {
+        create: {
+          profilePhoto,
+        },
+      },
+    },
   });
 
   // * profile creation
-  await prisma.profile.create({
-    data: { userId: createUser.id, profilePhoto },
-  });
+  // await prisma.profile.create({
+  //   data: { userId: createUser.id, profilePhoto },
+  // });
 
   // * find user
 
