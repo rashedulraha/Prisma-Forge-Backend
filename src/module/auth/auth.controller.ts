@@ -18,7 +18,7 @@ const loginUser = catchAsync(
     });
 
     //* set cookie in user browser refresh token
-    res.cookie("access_token", accessToken, {
+    res.cookie("refresh_token", accessToken, {
       httpOnly: true,
       secure: false,
       sameSite: "none",
