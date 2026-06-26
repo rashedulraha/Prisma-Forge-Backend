@@ -1,9 +1,8 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express, { Application, Request, Response } from "express";
+import express, { Application } from "express";
 import { configuration } from "./configuration/index.config";
-import { prisma } from "./lib/prisma";
-import { UserRouter } from "./module/user/user.route";
+import { userRouter } from "./module/user/user.route";
 import { authRouter } from "./module/auth/auth.route";
 
 const app: Application = express();
@@ -24,7 +23,9 @@ app.get("/", (req, res) => {
 });
 
 //* user activity routers
-app.use("/api/users", UserRouter);
+app.use("/api/users", userRouter);
+// * get profile
+app.use("/api/profile", userRouter);
 // * login user
 app.use("/api/auth/", authRouter);
 

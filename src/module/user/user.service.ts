@@ -3,6 +3,7 @@ import { prisma } from "../../lib/prisma";
 import { IRegistration } from "./user.interfaces";
 import { configuration } from "../../configuration/index.config";
 
+// * user registration
 const userRegistrationService = async (payload: IRegistration) => {
   const { name, email, password, profilePhoto } = payload;
 
@@ -49,8 +50,11 @@ const userRegistrationService = async (payload: IRegistration) => {
 
   return user;
 };
+//* get profile data
+const getProfileMe = async () => {};
 
 // export user services
 export const userService = {
   userRegistrationService,
+  getProfileMe,
 };
