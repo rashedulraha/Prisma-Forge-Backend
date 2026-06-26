@@ -3,4 +3,4 @@ import { userController } from "./user.controller";
 
 export const UserRouter = Router();
 
-UserRouter.post("/registration", userController.userRegister);
+UserRouter.post("/registration", userController.RegisterUser);
