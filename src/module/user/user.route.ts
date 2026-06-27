@@ -1,11 +1,16 @@
 import { NextFunction, Request, Response, Router } from "express";
+import httpStatus from "http-status";
+
 import { userController } from "./user.controller";
 import { jwtUtils } from "../../utils/jwt";
 import { configuration } from "../../configuration/index.config";
 import { Role } from "../../../generated/prisma/enums";
-import httpStatus from "http-status";
+import { catchAsync } from "../../utils/catchAsync";
+import { JwtPayload } from "jsonwebtoken";
+import { prisma } from "../../lib/prisma";
+import { ErrorThrow } from "../../utils/errorThrow";
 
-// declare global type interfaces
+// Extend Express Request
 declare global {
   namespace Express {
     interface Request {
@@ -21,50 +26,53 @@ declare global {
 
 export const userRouter = Router();
 
-// * user registration
+// Registration
 userRouter.post("/registration", userController.RegisterUser);
-// * get profile me
-userRouter.get(
-  "/me",
-  (req: Request, res: Response, next: NextFunction) => {
-    // console.log("request cookie : ", req.cookies);
 
-    const { access_token } = req.cookies;
+const auth = (...requiredRoles: Role[]) => {
+  return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const token =
+      req.cookies.access_token ||
+      req.headers.authorization?.startsWith("Bearer ")
+        ? req.headers.authorization?.split(" ")[1]
+        : req.headers.authorization;
 
-    // console.log("access token check : ", access_token);
+    if (!token) {
+      throw new Error(
+        "your are not logged in. please login in to access this request",
+      );
+    }
 
     const verifiedToken = jwtUtils.verifiedToken(
-      access_token,
+      token,
       configuration.jwt_access_token_secret,
     );
 
-    // console.log("verified token : ", verifiedToken);
-
-    if (typeof verifiedToken === "string") {
-      throw new Error(verifiedToken);
+    if (!verifiedToken.success) {
+      ErrorThrow(verifiedToken.data as string);
     }
 
-    const { id, name, email, role } = verifiedToken;
-    const requiredRoles = [Role.ADMIN, Role.AUTHOR, Role.USER];
+    const { id, name, email, role } = verifiedToken.data as JwtPayload;
 
     if (!requiredRoles.includes(role)) {
-      return res.status(httpStatus.FORBIDDEN).json({
-        success: true,
-        statusCode: httpStatus.FORBIDDEN,
-        message: "forbidden access, you don't have an access in this routes",
-      });
+      ErrorThrow(
+        "Forbidden. you don't have permission to access this request ",
+      );
     }
 
-    // console.log(verifiedToken);
+    const user = await prisma.user.findUnique({
+      where: { id, name, email, role },
+    });
 
-    req.user = {
-      id,
-      name,
-      email,
-      role,
-    };
+    if (!user) {
+      ErrorThrow("User not found . please log in again");
+    }
 
-    next();
-  },
-  userController.getProfileMe,
-);
+    if (user?.activeStatus === "BLOCK") {
+      ErrorThrow("Your account has ben blocked. please contact support");
+    }
+  });
+};
+
+// Get Profile
+userRouter.get("/me", userController.getProfileMe);

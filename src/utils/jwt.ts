@@ -1,21 +1,29 @@
 import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
+import { Role } from "../../generated/prisma/enums";
+
+export interface IJwtPayload extends JwtPayload {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+}
 
 const createToken = (
-  payload: JwtPayload,
+  payload: IJwtPayload,
   secret: string,
-  expiresIn: SignOptions,
-) => {
-  return jwt.sign(payload, secret, { expiresIn } as SignOptions);
+  expiresIn: SignOptions["expiresIn"],
+): string => {
+  return jwt.sign(payload, secret, {
+    expiresIn,
+  });
 };
 
-// * verified  access token
-// verified token
-export const verifiedToken = (token: string, secret: string) => {
+const verifiedToken = (token: string, secret: string) => {
   try {
-    const verifiedToken = jwt.verify(token, secret);
-    return verifiedToken;
+    const verifiedToken = jwt.verify(token, secret) as IJwtPayload;
+    return { success: true, data: verifiedToken };
   } catch (error) {
-    throw new Error((error as Error).message);
+    return { success: false, data: (error as Error).message };
   }
 };
 
