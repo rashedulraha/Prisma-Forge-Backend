@@ -25,12 +25,8 @@ const getProfileMe = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // res.send("Get my profile");
     const { access_token } = req.cookies;
-    // * verified access token
-    const verifiedAccessToken = jwtUtils.verifiedToken(
-      access_token,
-      configuration.jwt_access_token_secret,
-    );
-    console.log(verifiedAccessToken);
+
+    console.log("user request :", req.user);
   },
 );
 export const userController = {

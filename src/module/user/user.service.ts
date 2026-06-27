@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma";
-import { IRegistration } from "./user.interfaces";
+import { IProfileGet, IRegistration } from "./user.interfaces";
 import { configuration } from "../../configuration/index.config";
 
 // * user registration
@@ -51,7 +51,7 @@ const userRegistrationService = async (payload: IRegistration) => {
   return user;
 };
 //* get profile data
-const getProfileMe = async () => {};
+const getProfileMe = async (payload: IProfileGet) => {};
 
 // export user services
 export const userService = {
