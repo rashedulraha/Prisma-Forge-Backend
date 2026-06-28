@@ -8,3 +8,11 @@ USER
 ADMIN
 AUTHOR
 }
+
+
+// post status 
+enum PostStatus {
+  DRAFT 
+  PUBLISHED 
+  ACTIVE
+}

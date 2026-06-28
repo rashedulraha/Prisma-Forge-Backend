@@ -35,6 +35,12 @@ const loginUser = catchAsync(
   },
 );
 
+// create refresh token
+const refresh_token = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {},
+);
+
 export const authController = {
   loginUser,
+  refresh_token,
 };

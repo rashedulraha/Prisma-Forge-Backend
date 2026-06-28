@@ -1,0 +1,12 @@
+model Post {
+  id String @id @default(uuid())
+  title String 
+  content String
+  thumbnail String? 
+  isFeature Boolean @default(false)
+  postStatus PostStatus @default(PUBLISHED)
+  tag String[] 
+  views Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -3,8 +3,6 @@ import httpStatus from "http-status";
 import { userService } from "./user.service";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/responseData";
-import { configuration } from "../../configuration/index.config";
-import { jwtUtils } from "../../utils/jwt";
 
 //* user registration
 const RegisterUser = catchAsync(
@@ -27,6 +25,8 @@ const getProfileMe = catchAsync(
     const { access_token } = req.cookies;
 
     console.log("user request :", req.user);
+
+    const profile = await userService;
   },
 );
 export const userController = {
