@@ -1,0 +1,11 @@
+model Comment {
+  id       String @id @default(ulid())
+  comment  String
+
+  authorId String
+  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  postId   String
+  post     Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  commentsStatus commentsStatus @default(APPROVED)
+}

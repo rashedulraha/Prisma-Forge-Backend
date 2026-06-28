@@ -7,6 +7,9 @@ model Post {
   postStatus PostStatus @default(PUBLISHED)
   tag String[] 
   views Int @default(0)
+  posts Comment[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("posts")
 }

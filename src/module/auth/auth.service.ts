@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { JwtPayload } from "jsonwebtoken";
+import { JwtPayload, SignOptions } from "jsonwebtoken";
 
 import { prisma } from "../../lib/prisma";
 import { configuration } from "../../configuration/index.config";
@@ -106,7 +106,7 @@ const refreshToken = async (token: string) => {
   const accessToken = jwtUtils.createToken(
     jwtPayload,
     configuration.jwt_access_token_secret,
-    configuration.jwt_access_expires_in,
+    configuration.jwt_access_expires_in as SignOptions,
   );
 
   return {

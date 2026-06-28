@@ -16,3 +16,10 @@ enum PostStatus {
   PUBLISHED 
   ACTIVE
 }
+
+
+// comments status 
+enum commentsStatus {
+APPROVED
+REJECTED 
+}
